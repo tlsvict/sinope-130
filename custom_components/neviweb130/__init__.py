@@ -158,6 +158,8 @@ from .schema import NOTIFY as DEFAULT_NOTIFY
 from .schema import SCAN_INTERVAL as DEFAULT_SCAN_INTERVAL
 from .schema import STAT_INTERVAL as DEFAULT_STAT_INTERVAL
 
+import uuid
+
 REQUESTS_TIMEOUT = 30
 HOST = "https://neviweb.com"
 LOGIN_URL = f"{HOST}/api/login"
@@ -358,6 +360,37 @@ class Neviweb130Client:
                 allow_redirects=False,
                 timeout=self._timeout,
             )
+            try:
+                # 1. Get the current time and format it as a string for sorting/readability.
+                # The format YYYYmmdd-HHMMSSf ensures chronological sorting and includes microseconds.
+                debug_timestamp_str = datetime.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
+
+                # 2. Generate a random UUID (Version 4) for additional uniqueness guarantee.
+                debug_unique_id_str = str(uuid.uuid4())
+
+                # 3. Combine the components into a single unique name.
+                debug_unique_name = f"neviweb_http_{debug_timestamp_str}_{debug_unique_id_str}.txt"
+              
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': raw_res.request.headers,
+                            'body': raw_res.request.body,
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': raw_res.headers,
+                            'body': raw_res.text
+                        }
+                    }
+                # Open a file for writing and use json.dump()
+                with open(debug_unique_name, 'w') as debug_json_file:
+                    json.dump(debug_data, debug_json_file, indent=4) # The 'indent' makes the file human-readable
+            except OSError:
+              _LOGGER.debug("Unable to write 363");
         except OSError:
             raise PyNeviweb130Error("Cannot submit login form... Check your network or firewall")
         if raw_res.status_code != 200:
