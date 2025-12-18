@@ -158,6 +158,10 @@ from .schema import NOTIFY as DEFAULT_NOTIFY
 from .schema import SCAN_INTERVAL as DEFAULT_SCAN_INTERVAL
 from .schema import STAT_INTERVAL as DEFAULT_STAT_INTERVAL
 
+import uuid
+import datetime
+import json
+
 REQUESTS_TIMEOUT = 30
 HOST = "https://neviweb.com"
 LOGIN_URL = f"{HOST}/api/login"
@@ -358,6 +362,25 @@ class Neviweb130Client:
                 allow_redirects=False,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
         except OSError:
             raise PyNeviweb130Error("Cannot submit login form... Check your network or firewall")
         if raw_res.status_code != 200:
@@ -406,6 +429,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+
             networks = raw_res.json()
             _LOGGER.warning("Number of networks found on Neviweb: %s", len(networks))
             _LOGGER.warning("networks: %s", networks)
@@ -547,6 +590,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+
             _LOGGER.debug("Received gateway data: %s", raw_res.json())
         except OSError:
             raise PyNeviweb130Error("Cannot get gateway data")
@@ -569,6 +632,26 @@ class Neviweb130Client:
                     cookies=self._cookies,
                     timeout=self._timeout,
                 )
+                try:
+                    debug_data = {
+                            'req': {
+                                'method': raw_res2.request.method,
+                                'url': raw_res2.request.url,
+                                'headers': [f"{k}: {v}" for k, v in raw_res2.request.headers.items()],
+                                'body': str(raw_res2.request.body),
+                            }, 
+                            'res': {
+                                'code': raw_res2.status_code,
+                                'reason': raw_res2.reason,
+                                'url': raw_res2.url,
+                                'headers': [f"{k}: {v}" for k, v in raw_res2.headers.items()],
+                                'body': raw_res2.text
+                            }
+                        }
+                    _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+                except OSError:
+                  _LOGGER.error("Unable to write 363");
+
                 _LOGGER.debug("Received gateway data 2: %s", raw_res2.json())
             except OSError:
                 raise PyNeviweb130Error("Cannot get gateway data 2")
@@ -585,6 +668,26 @@ class Neviweb130Client:
                     cookies=self._cookies,
                     timeout=self._timeout,
                 )
+                try:
+                    debug_data = {
+                            'req': {
+                                'method': raw_res3.request.method,
+                                'url': raw_res3.request.url,
+                                'headers': [f"{k}: {v}" for k, v in raw_res3.request.headers.items()],
+                                'body': str(raw_res3.request.body),
+                            }, 
+                            'res': {
+                                'code': raw_res3.status_code,
+                                'reason': raw_res3.reason,
+                                'url': raw_res3.url,
+                                'headers': [f"{k}: {v}" for k, v in raw_res3.headers.items()],
+                                'body': raw_res3.text
+                            }
+                        }
+                    _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+                except OSError:
+                  _LOGGER.error("Unable to write 363");
+                
                 _LOGGER.debug("Received gateway data 3: %s", raw_res3.json())
             except OSError:
                 raise PyNeviweb130Error("Cannot get gateway data 3")
@@ -648,6 +751,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+
         #            _LOGGER.debug("Received devices data: %s", raw_res.json())
         except requests.exceptions.ReadTimeout:
             return {"errorCode": "ReadTimeout"}
@@ -678,6 +801,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+
             _LOGGER.debug("Received devices status: %s", raw_res.json())
         except requests.exceptions.ReadTimeout:
             return {"errorCode": "ReadTimeout"}
@@ -703,6 +846,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+
             _LOGGER.debug("Received neviweb status: %s", raw_res.json())
         except requests.exceptions.ReadTimeout:
             return {"errorCode": "ReadTimeout"}
@@ -727,6 +890,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+            
             _LOGGER.debug("Received devices alert (%s): %s", device_id, raw_res.json())
         except requests.exceptions.ReadTimeout:
             return {"errorCode": "ReadTimeout"}
@@ -757,6 +940,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+
         except OSError:
             raise PyNeviweb130Error("Cannot get device monthly stats...")
         # Update cookies
@@ -783,6 +986,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+            
         except OSError:
             raise PyNeviweb130Error("Cannot get device daily stats...")
         # Update cookies
@@ -809,6 +1032,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+            
         except OSError:
             raise PyNeviweb130Error("Cannot get device hourly stats...")
         # Update cookies
@@ -836,6 +1079,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+            
         except OSError:
             raise PyNeviweb130Error("Cannot get Neviweb weather and icon...")
         # Update cookies
@@ -858,6 +1121,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': raw_res.request.method,
+                            'url': raw_res.request.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.request.headers.items()],
+                            'body': str(raw_res.request.body),
+                        }, 
+                        'res': {
+                            'code': raw_res.status_code,
+                            'reason': raw_res.reason,
+                            'url': raw_res.url,
+                            'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'body': raw_res.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+            
         except OSError:
             raise PyNeviweb130Error("Cannot get device error code status...")
         # Update cookies
@@ -1737,6 +2020,26 @@ class Neviweb130Client:
                     cookies=self._cookies,
                     timeout=self._timeout,
                 )
+                try:
+                    debug_data = {
+                            'req': {
+                                'method': resp.request.method,
+                                'url': resp.request.url,
+                                'headers': [f"{k}: {v}" for k, v in resp.request.headers.items()],
+                                'body': str(resp.request.body),
+                            }, 
+                            'res': {
+                                'code': resp.status_code,
+                                'reason': resp.reason,
+                                'url': resp.url,
+                                'headers': [f"{k}: {v}" for k, v in resp.headers.items()],
+                                'body': resp.text
+                            }
+                        }
+                    _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+                except OSError:
+                  _LOGGER.error("Unable to write 363");
+                
                 _LOGGER.debug(
                     "Requests = %s%s%s %s",
                     DEVICE_DATA_URL,
@@ -1774,6 +2077,26 @@ class Neviweb130Client:
                 cookies=self._cookies,
                 timeout=self._timeout,
             )
+            try:
+                debug_data = {
+                        'req': {
+                            'method': resp.request.method,
+                            'url': resp.request.url,
+                            'headers': [f"{k}: {v}" for k, v in resp.request.headers.items()],
+                            'body': str(resp.request.body),
+                        }, 
+                        'res': {
+                            'code': resp.status_code,
+                            'reason': resp.reason,
+                            'url': resp.url,
+                            'headers': [f"{k}: {v}" for k, v in resp.headers.items()],
+                            'body': resp.text
+                        }
+                    }
+                _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
+            except OSError:
+              _LOGGER.error("Unable to write 363");
+            
 
             _LOGGER.debug("Data = %s", data)
             _LOGGER.debug("Requests response = %s", resp.status_code)
