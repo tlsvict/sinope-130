@@ -375,6 +375,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -442,6 +443,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -603,6 +605,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -645,6 +648,7 @@ class Neviweb130Client:
                                 'reason': raw_res2.reason,
                                 'url': raw_res2.url,
                                 'headers': [f"{k}: {v}" for k, v in raw_res2.headers.items()],
+                                'cookies': raw_res2.cookies.get_dict(),
                                 'body': raw_res2.text
                             }
                         }
@@ -681,6 +685,7 @@ class Neviweb130Client:
                                 'reason': raw_res3.reason,
                                 'url': raw_res3.url,
                                 'headers': [f"{k}: {v}" for k, v in raw_res3.headers.items()],
+                                'cookies': raw_res3.cookies.get_dict(),
                                 'body': raw_res3.text
                             }
                         }
@@ -764,6 +769,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -814,6 +820,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -859,6 +866,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -903,6 +911,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -953,6 +962,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -999,6 +1009,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -1045,6 +1056,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -1092,6 +1104,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -1134,6 +1147,7 @@ class Neviweb130Client:
                             'reason': raw_res.reason,
                             'url': raw_res.url,
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
+                            'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
                         }
                     }
@@ -2033,6 +2047,7 @@ class Neviweb130Client:
                                 'reason': resp.reason,
                                 'url': resp.url,
                                 'headers': [f"{k}: {v}" for k, v in resp.headers.items()],
+                                'cookies': resp.cookies.get_dict(),
                                 'body': resp.text
                             }
                         }
@@ -2090,6 +2105,7 @@ class Neviweb130Client:
                             'reason': resp.reason,
                             'url': resp.url,
                             'headers': [f"{k}: {v}" for k, v in resp.headers.items()],
+                            'cookies': resp.cookies.get_dict(),
                             'body': resp.text
                         }
                     }
