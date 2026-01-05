@@ -177,8 +177,8 @@ IGNORE_MIWI = DEFAULT_IGNORE_MIWI
 STAT_INTERVAL = DEFAULT_STAT_INTERVAL
 NOTIFY = DEFAULT_NOTIFY
 
-DEFAULT_LOG_MAX_BYTES = 2 * 1024 * 1024
-DEFAULT_LOG_BACKUP_COUNT = 3
+DEFAULT_LOG_MAX_BYTES = 200 * 1024 * 1024
+DEFAULT_LOG_BACKUP_COUNT = 30
 DEFAULT_LOG_RESET_ON_START = True
 LOGGER_NAME = "custom_components.neviweb130"
 
@@ -377,7 +377,7 @@ class Neviweb130Client:
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
                             'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
-                        }
+                        },
                     }
                 _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
             except OSError:
@@ -445,7 +445,7 @@ class Neviweb130Client:
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
                             'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
-                        }
+                        },
                     }
                 _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
             except OSError:
@@ -607,7 +607,7 @@ class Neviweb130Client:
                             'headers': [f"{k}: {v}" for k, v in raw_res.headers.items()],
                             'cookies': raw_res.cookies.get_dict(),
                             'body': raw_res.text
-                        }
+                        },
                     }
                 _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
             except OSError:
@@ -622,6 +622,8 @@ class Neviweb130Client:
             self._cookies = raw_res.cookies
         else:
             self._cookies.update(raw_res.cookies)
+            
+        _LOGGER.info("cookie info: %s", json.dumps(self._cookies.get_dict(), indent=4))
 
         # Prepare data
         self.gateway_data = raw_res.json()
@@ -650,7 +652,7 @@ class Neviweb130Client:
                                 'headers': [f"{k}: {v}" for k, v in raw_res2.headers.items()],
                                 'cookies': raw_res2.cookies.get_dict(),
                                 'body': raw_res2.text
-                            }
+                            },
                         }
                     _LOGGER.info("http info: %s", json.dumps(debug_data, indent=4))
                 except OSError:
