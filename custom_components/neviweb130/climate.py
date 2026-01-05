@@ -2110,6 +2110,7 @@ class Neviweb130Thermostat(ClimateEntity):
         self._time_format = "24h"
         self._today_kwh = 0
         self._total_kwh_count = 0
+        self._ytd_kwh = 0
         self._wattage = 0
         self._weather_icon = 0
 
@@ -2261,6 +2262,7 @@ class Neviweb130Thermostat(ClimateEntity):
                 "eco_power_absolute": self._drstatus_abs,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -2918,10 +2920,20 @@ class Neviweb130Thermostat(ClimateEntity):
 
     def do_stat(self, start):
         """Get device energy statistic."""
+        
         if start - self._energy_stat_time > STAT_INTERVAL and self._energy_stat_time != 0:
             today = date.today()
             current_month = today.month
             current_day = today.day
+
+            # Observed energy stat behaviour:  Monthly & hourly stats are updated once a day to previous midnight Z time at some point during the early AM
+            # The period time is the start time of the period ; as such, we will (a) never have a day stat that isn't already included in the month stat
+            # and (b) we should decide to add the hourly stats based hour's utc day being > last hour's utc day (which may be more than 24 hours)
+            ytd_year = datetime.now(tz=timezone.utc).year
+            ytd_last_month = 0
+            ytd_last_day = 0
+            ytd_kwh = 0
+
             device_monthly_stats = self._client.get_device_monthly_stats(self._id)
             _LOGGER.debug("%s device_monthly_stats = %s", self._name, device_monthly_stats)
             if device_monthly_stats is not None and len(device_monthly_stats) > 1:
@@ -2930,6 +2942,9 @@ class Neviweb130Thermostat(ClimateEntity):
                 k = 0
                 while k < n:
                     monthly_kwh_count += device_monthly_stats[k]["period"] / 1000
+                    dt_cur_stat = datetime.fromisoformat(device_monthly_stats[k]["date"][:-1] + "+00:00").astimezone(timezone.utc)
+                    if (dt_cur_stat.year == ytd_year):
+                        ytd_kwh += device_monthly_stats[k]["period"] / 1000
                     k += 1
                 self._monthly_kwh_count = round(monthly_kwh_count, 3)
                 self._month_kwh = round(device_monthly_stats[n - 1]["period"] / 1000, 3)
@@ -2959,6 +2974,10 @@ class Neviweb130Thermostat(ClimateEntity):
                 self._today_kwh = round(device_daily_stats[n - 1]["period"] / 1000, 3)
                 dt_day = datetime.fromisoformat(device_daily_stats[n - 1]["date"][:-1].replace("Z", "+00:00"))
                 _LOGGER.debug("stat day = %s", dt_day.day)
+                dt_cur_stat = datetime.fromisoformat(device_daily_stats[n - 1]["date"][:-1] + "+00:00").astimezone(timezone.utc)
+                if (dt_cur_stat.year == ytd_year ):
+                    ytd_last_month = dt_cur_stat.month
+                    ytd_last_day = dt_cur_stat.day
             else:
                 self._today_kwh = 0
                 _LOGGER.warning("%s Got None for device_daily_stats", self._name)
@@ -2980,6 +2999,11 @@ class Neviweb130Thermostat(ClimateEntity):
                         == current_day
                     ):
                         hourly_kwh_count += device_hourly_stats[k]["period"] / 1000
+                    dt_cur_stat = datetime.fromisoformat(device_hourly_stats[n - 1]["date"][:-1] + "+00:00").astimezone(timezone.utc)
+                    if (dt_cur_stat.year == ytd_year and 
+                       ((dt_cur_stat.month == ytd_last_month and dt_cur_stat.day > ytd_last_day) or dt_cur_stat.month > ytd_last_month)
+                    ):
+                        ytd_kwh += device_hourly_stats[k]["period"] / 1000
                     k += 1
                 self._hourly_kwh_count = round(hourly_kwh_count, 3)
                 self._hour_kwh = round(device_hourly_stats[n - 1]["period"] / 1000, 3)
@@ -3002,6 +3026,7 @@ class Neviweb130Thermostat(ClimateEntity):
                     self._total_kwh_count += round(self._hour_kwh, 3)
                     # save_data(self._id, self._total_kwh_count, self._marker)
                     self._mark = self._marker
+            self._ytd_kwh = round(ytd_kwh, 3)
             self._energy_stat_time = time.time()
         if self._energy_stat_time == 0:
             self._energy_stat_time = start
@@ -3284,6 +3309,7 @@ class Neviweb130G2Thermostat(Neviweb130Thermostat):
                 "eco_setpoint_delta": self._drsetpoint_value,
                 "cold_load_pickup": self._cold_load_pickup,
                 "heat_lockout_temp": self._heat_lockout_temp,
+                "ytd_kwh": self._ytd_kwh,                
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -3465,6 +3491,7 @@ class Neviweb130FloorThermostat(Neviweb130Thermostat):
                 "eco_power_relative": self._drstatus_rel,
                 "eco_power_absolute": self._drstatus_abs,
                 "eco_setpoint_status": self._drsetpoint_status,
+                "ytd_kwh": self._ytd_kwh,
                 "eco_setpoint_delta": self._drsetpoint_value,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
@@ -3657,6 +3684,7 @@ class Neviweb130LowThermostat(Neviweb130Thermostat):
                 "eco_power_absolute": self._drstatus_abs,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -3793,6 +3821,7 @@ class Neviweb130DoubleThermostat(Neviweb130Thermostat):
                 "eco_power_absolute": self._drstatus_abs,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -3961,6 +3990,7 @@ class Neviweb130WifiThermostat(Neviweb130Thermostat):
                 "eco_onOff": self._drstatus_onoff,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -4141,6 +4171,7 @@ class Neviweb130WifiLiteThermostat(Neviweb130Thermostat):
                 "eco_onOff": self._drstatus_onoff,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -4309,6 +4340,7 @@ class Neviweb130ColorWifiThermostat(Neviweb130Thermostat):
                 "eco_onOff": self._drstatus_onoff,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -4518,6 +4550,7 @@ class Neviweb130LowWifiThermostat(Neviweb130Thermostat):
                 "eco_power_absolute": self._drstatus_abs,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -4715,6 +4748,7 @@ class Neviweb130WifiFloorThermostat(Neviweb130Thermostat):
                 "eco_power_absolute": self._drstatus_abs,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
@@ -4925,6 +4959,7 @@ class Neviweb130HcThermostat(Neviweb130Thermostat):
                 "eco_power_absolute": self._drstatus_abs,
                 "eco_setpoint_status": self._drsetpoint_status,
                 "eco_setpoint_delta": self._drsetpoint_value,
+                "ytd_kwh": self._ytd_kwh,
                 "total_kwh_count": self._total_kwh_count,
                 "monthly_kwh_count": self._monthly_kwh_count,
                 "daily_kwh_count": self._daily_kwh_count,
